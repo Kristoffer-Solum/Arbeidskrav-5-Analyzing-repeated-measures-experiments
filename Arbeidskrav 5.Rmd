@@ -9,16 +9,12 @@ editor_options:
   chunk_output_type: inline
 ---
 
+
 ```{r setup, include=FALSE}
-
-
 library(tidyverse)
 library(exscidata)
 data("dxadata") 
 data("strengthvolume")
-
-
-
 ```
 
 
@@ -26,7 +22,6 @@ data("strengthvolume")
 
 ```{r}
 library(tidyverse)
-
 dat <- dxadata %>%
   select(participant:include, lean.left_leg, lean.right_leg) %>%
   pivot_longer(names_to = "leg", 
@@ -44,32 +39,93 @@ dat <- dxadata %>%
   print()
 
 
+
+
+
+
+
 library(lme4)
 library(lmerTest)
-
 m0 <- lm(post ~ pre + sex + sets, data = dat)
 m1 <- lmerTest::lmer(post ~ pre + sets + (1|participant), data = dat)
 m2 <- lme4::lmer(post ~ pre + sex + sets + (1|participant), data = dat)
-
 plot(m2)
-
 summary(m0)
 summary(m1)
 summary(m2)
-
 confint(m2)
-
-
 ```
 
+
+
 ```{r}
-strengthvolume %>%
+modeldat %>%
+  select(participant, group, time, sets) %>%
+  ggplot(aes(time, sets, color = time, sets)) + geom_point(size = 2.5) +
+  geom_abline(intercept = 0, slope = 1) %>%
+
+print()
+```
+
+
+
+```{r}
+
+modeldat <- dxadata %>%
+  select(participant:include, lean.left_leg, lean.right_leg) %>%
+  pivot_longer(names_to = "leg", 
+               values_to = "lean.mass", 
+               cols = lean.left_leg:lean.right_leg) %>%
+   mutate(leg = if_else(leg == "lean.left_leg", "L", "R"), 
+         sets = if_else(multiple == leg, "multiple", "single")) %>%
+  select(participant, time, sets, sex, leg, lean.mass) %>%
+  group_by(participant) %>%
+  mutate(n = n(), group = factor(sets, levels = c("single", "multiple")), time = factor(time, levels = c("pre", "post"))) %>%
+  
+  print()
+
+
+modeldat %>%
+ ggplot(aes(time, lean.mass, group = paste(participant, group), color = group)) + geom_line() + theme_minimal()
+```
+
+
+
+```{r}
+styrke1 <- strengthvolume %>%
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
   group_by(participant, time, sex, sets) %>%
   summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
   ungroup() %>%
-  print()
+  
+print()
+
+
+styrke1 %>%
+  filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
+  mutate(time = factor(time, levels = c("pre", "post")),
+         group = factor(sets, levels = c("single", "multiple"))) %>%
+ ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() 
+
 
 ```
+
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+
+
+
+
+
 
