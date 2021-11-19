@@ -58,14 +58,7 @@ confint(m2)
 
 
 
-```{r}
-modeldat %>%
-  select(participant, group, time, sets) %>%
-  ggplot(aes(time, sets, color = time, sets)) + geom_point(size = 2.5) +
-  geom_abline(intercept = 0, slope = 1) %>%
 
-print()
-```
 
 
 
@@ -90,6 +83,14 @@ modeldat %>%
 ```
 
 
+```{r}
+modeldat %>%
+  select(participant, group, time, sets) %>%
+  ggplot(aes(time, sets, color = time, sets)) + geom_point(size = 2.5) +
+  geom_abline(intercept = 0, slope = 1) %>%
+
+print()
+```
 
 ```{r}
 styrke1 <- strengthvolume %>%
@@ -102,6 +103,7 @@ styrke1 <- strengthvolume %>%
 print()
 
 
+
 styrke1 %>%
   filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
   mutate(time = factor(time, levels = c("pre", "post")),
@@ -111,18 +113,9 @@ styrke1 %>%
 
 ```
 
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+
+
+
 
 
 
