@@ -4,14 +4,16 @@ author: "Kristoffer Solum"
 date: "16 11 2021"
 output:
   pdf_document: default
-  html_document: default
   word_document: default
+  html_document: default
 editor_options:
   chunk_output_type: console
 ---
 
 
 ```{r setup, include=FALSE}
+remotes::install_github("dhammarstrom/exscidata")
+
 library(tidyverse)
 library(exscidata)
 data("dxadata") 
@@ -34,11 +36,24 @@ dat <- dxadata %>%
   
   pivot_wider(names_from = time,
               values_from = lean.mass) %>%
-  mutate((lbm.change = post - pre), 
-  pre.mc = pre - mean(pre)) %>%  
+  mutate(lbm.change = post - pre) %>%
+  mutate(pre.mc = pre - mean(pre)) %>% 
+  mutate(prosentvis.endring = ((post - pre) / pre) * 100) %>%
+  filter(!is.na(lbm.change)) %>%
+
   
   print()
+  
+  
+  
 
+
+dat %>%
+  group_by(sets) %>%
+  summarise(m = mean(prosentvis.endring),
+            sd = sd(prosentvis.endring)) %>%
+
+print()
 
 
 
@@ -79,6 +94,8 @@ modeldat <- dxadata %>%
   print()
 
 
+
+
 modeldat %>%
  ggplot(aes(time, lean.mass, group = paste(participant, group), color = group)) + geom_line() + theme_minimal()
 ```
@@ -87,22 +104,49 @@ modeldat %>%
 
 
 ```{r}
+
 styrke1 <- strengthvolume %>%
+  filter(!is.na(load)) %>%
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
   group_by(participant, time, sex, sets) %>%
   summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
   ungroup() %>%
   
+  
+  pivot_wider(names_from = time,
+              values_from = combined.load) %>%
+  mutate(prosentvis.endring = ((post - pre) / pre) * 100) %>%
+  
+  print()
+
+
+styrke1 %>%    
+  filter(!is.na(post)) %>%
+  group_by(sets) %>%
+  summarise(m = mean(prosentvis.endring),
+            sd = sd(prosentvis.endring)) %>%
+
+print()
 
 
 
+styrkemodell <- strengthvolume %>%
+  group_by(exercise) %>%
+  mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
+  group_by(participant, time, sex, sets) %>%
+  summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
+  ungroup() %>%
+  
+  print()
 
-styrke1 %>%
+styrkemodell %>%
   filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
   mutate(time = factor(time, levels = c("pre", "post")),
          group = factor(sets, levels = c("single", "multiple"))) %>%
- ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() 
+ ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() %>%
+
+print()
 
 
 
@@ -112,7 +156,7 @@ select(participant, sets, time, combined.load) %>%
               values_from = combined.load) %>%
   mutate(diff1 = (week5 - pre)/pre * 100, diff2 = (post - pre)/pre * 100)  %>%
   
-  print()
+  
   
 
 tabellstyrke <- styrkediff %>%
@@ -123,10 +167,10 @@ mutate(sets = factor(sets, levels = c("multiple", "single"),
    flextable()  %>%
   set_header_labels(sets = " ",
                     pre = "pre", 
-                     post = " Post")%>%
-  print()
+                     post = " Post") 
+  
 
-tabellstyrke  
+  
 
 ```
 
