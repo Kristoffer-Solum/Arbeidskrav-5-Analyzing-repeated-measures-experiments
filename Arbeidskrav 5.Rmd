@@ -150,28 +150,6 @@ print()
 
 
 
-styrkediff <- styrke1 %>% 
-select(participant, sets, time, combined.load) %>%
-  pivot_wider(names_from = time,
-              values_from = combined.load) %>%
-  mutate(diff1 = (week5 - pre)/pre * 100, diff2 = (post - pre)/pre * 100)  %>%
-  
-  
-  
-
-tabellstyrke <- styrkediff %>%
-mutate(sets = factor(sets, levels = c("multiple", "single"), 
-                        labels = c("3 sett", "1 sett"))) %>%
-  select(sets, pre, post) %>%
-  arrange(sets) %>%
-   flextable()  %>%
-  set_header_labels(sets = " ",
-                    pre = "pre", 
-                     post = " Post") 
-  
-
-  
-
 ```
 
 
