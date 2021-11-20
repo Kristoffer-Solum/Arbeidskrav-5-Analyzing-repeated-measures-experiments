@@ -3,10 +3,11 @@ title: "Arbeidskrav 5"
 author: "Kristoffer Solum"
 date: "16 11 2021"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
+  word_document: default
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 
@@ -83,14 +84,7 @@ modeldat %>%
 ```
 
 
-```{r}
-modeldat %>%
-  select(participant, group, time, sets) %>%
-  ggplot(aes(time, sets, color = time, sets)) + geom_point(size = 2.5) +
-  geom_abline(intercept = 0, slope = 1) %>%
 
-print()
-```
 
 ```{r}
 styrke1 <- strengthvolume %>%
@@ -100,7 +94,7 @@ styrke1 <- strengthvolume %>%
   summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
   ungroup() %>%
   
-print()
+
 
 
 
@@ -110,6 +104,29 @@ styrke1 %>%
          group = factor(sets, levels = c("single", "multiple"))) %>%
  ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() 
 
+
+
+styrkediff <- styrke1 %>% 
+select(participant, sets, time, combined.load) %>%
+  pivot_wider(names_from = time,
+              values_from = combined.load) %>%
+  mutate(diff1 = (week5 - pre)/pre * 100, diff2 = (post - pre)/pre * 100)  %>%
+  
+  print()
+  
+
+tabellstyrke <- styrkediff %>%
+mutate(sets = factor(sets, levels = c("multiple", "single"), 
+                        labels = c("3 sett", "1 sett"))) %>%
+  select(sets, pre, post) %>%
+  arrange(sets) %>%
+   flextable()  %>%
+  set_header_labels(sets = " ",
+                    pre = "pre", 
+                     post = " Post")%>%
+  print()
+
+tabellstyrke  
 
 ```
 
