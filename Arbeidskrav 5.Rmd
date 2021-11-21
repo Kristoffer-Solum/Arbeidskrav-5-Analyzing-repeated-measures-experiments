@@ -3,9 +3,9 @@ title: "Arbeidskrav 5 Analyzing repeated measures experiments"
 author: "Kristoffer Solum"
 date: "16 11 2021"
 output:
-  html_document: default
-  word_document: default
   pdf_document: default
+  word_document: default
+  html_document: default
 editor_options:
   chunk_output_type: inline
 bibliography: references.bib
@@ -34,13 +34,15 @@ Tverrsnittarealet til musklene i quadriceps (vastus lateralis, medialis, interme
 
 ## Statestikk
 
-All deskriptiv data er presentert som et gjennomsnitt av prosentvis ending med standardavvik ved mindre annet er oppgitt. Statistiske tester ble utført i RStudio (versjon RStudio 1.4.1717; R Foundation for Statistics Computing, Vienna, AT) 
+All deskriptiv data er presentert som et gjennomsnitt av prosentvis ending med standardavvik ved mindre annet er oppgitt. Statistiske tester ble utført i RStudio (versjon RStudio 1.4.1717; R Foundation for Statistics Computing, Vienna, AT)
 
 # Resultater
 
-Totalt, førte 12 uker med styrketrening til en signifikant økning i muskelstyrke på 31±14% for multiple- sett og en økning på 25±13% for multiple- sett (P<0,001). Økningen i muskelvekst var også signifikant på 3,3±4% for multiple- sett og 2±4% for single- sett (P<0,001). 
+Totalt, førte 12 uker med styrketrening til en signifikant økning i muskelstyrke på 31±14% for multiple- sett og en økning på 25±13% for multiple- sett (P\<0,001). Økningen i muskelvekst var også signifikant på 3,3±4% for multiple- sett og 2±4% for single- sett (P\<0,001).
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
 remotes::install_github("dhammarstrom/exscidata")
 
 library(tidyverse)
@@ -65,10 +67,9 @@ dat <- dxadata %>%
   mutate(lbm.change = post - pre) %>%
   mutate(pre.mc = pre - mean(pre)) %>% 
   mutate(prosentvis.endring = ((post - pre) / pre) * 100) %>%
-  filter(!is.na(lbm.change)) %>%
+  filter(!is.na(lbm.change)) 
 
-  
-  print()
+
   
   
   
@@ -77,9 +78,8 @@ dat <- dxadata %>%
 dat %>%   
   group_by(sets) %>%
   summarise(m = mean(prosentvis.endring),
-            sd = sd(prosentvis.endring)) %>%
+            sd = sd(prosentvis.endring)) 
 
-print()
 
 
 
@@ -106,9 +106,7 @@ modeldat <- dxadata %>%
          sets = if_else(multiple == leg, "multiple", "single")) %>%
   select(participant, time, sets, sex, leg, lean.mass) %>%
   group_by(participant) %>%
-  mutate(n = n(), group = factor(sets, levels = c("single", "multiple")), time = factor(time, levels = c("pre", "post"))) %>%
-  
-  print()
+  mutate(n = n(), group = factor(sets, levels = c("single", "multiple")), time = factor(time, levels = c("pre", "post")))
 
 
 
@@ -130,18 +128,14 @@ styrke1 <- strengthvolume %>%
   
   pivot_wider(names_from = time,
               values_from = combined.load) %>%
-  mutate(prosentvis.endring = ((post - pre) / pre) * 100) %>%
-  
-  print()
+  mutate(prosentvis.endring = ((post - pre) / pre) * 100) 
 
 
 styrke1 %>%    
   filter(!is.na(post)) %>%
   group_by(sets) %>%
   summarise(m = mean(prosentvis.endring),
-            sd = sd(prosentvis.endring)) %>%
-
-print()
+            sd = sd(prosentvis.endring)) 
 
 
 
@@ -161,24 +155,21 @@ styrkemodell <- strengthvolume %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
   group_by(participant, time, sex, sets) %>%
   summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
-  ungroup() %>%
-  
-  print()
+  ungroup() 
 
 styrkemodell %>%
   filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
   mutate(time = factor(time, levels = c("pre", "post")),
          group = factor(sets, levels = c("single", "multiple"))) %>%
- ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() %>%
-
-print()
+ ggplot(aes(time, combined.load, group = paste(participant, sets), color = sets)) + geom_line() + theme_minimal() 
 ```
-
 
 # Diskusjon
 
+I denne studien viste det at multiple- sett styrketrening førte til bedre økning i muskelstyrke og muskelvekst enn single- sett trening. Dette resultatet stemmer overns med andre studier som har funnet at flere sett er bedre enn en @galvão2005a @humburg2007a.
+
 ## Konklusjon
 
-# Refferanser 
+# Refferanser
 
-[@carpinelli1998\]\[@galvão2005\]\[@hass2001\]\[@humburg2007\]\[@kraemer2002\]\[@krieger2010] 
+[@carpinelli1998; @galvão2005; @hass2001; @humburg2007; @kraemer2002; @krieger2010]
