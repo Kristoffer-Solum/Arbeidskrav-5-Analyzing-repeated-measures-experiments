@@ -1,15 +1,42 @@
 ---
-title: "Arbeidskrav 5"
+title: "Arbeidskrav 5 Analyzing repeated measures experiments"
 author: "Kristoffer Solum"
 date: "16 11 2021"
 output:
   word_document: default
-  html_document: default
   pdf_document: default
+  html_document: default
 editor_options:
   chunk_output_type: console
+bibliography: references.bib
 ---
 
+# Inntroduksjon
+
+I denne oppgaven skal jeg analysere og diskutere og forske på artikler som undersøker effekten av styrketrening på muskelstyrke og muskelvekst.  \
+Forskning på styrketrening har vist det det forbedrer muskelstyrke, muskel masse, beintetthet og bindevevstykkelse @kraemer2002. For å designe et treningsprogram for styrketrening krever det at man tar en del variabler til betraktning, dette inkluderer, treningsfrekvens, intensitet og volum av programmet @hass2001. Innenfor forskningen på styrketrening er det stor forskjell hva er fokuset, og noe av det mest interessante er å se på forskjellen mellom antall sett, som har blitt gjort i flere studier @krieger2010. Tidligere har det blitt argumentert for at ett sett (single- sett) per øvelse er alt som er nødvendig for hele populasjonen og at man ikke får større utbytte av flere sett @carpinelli1998. Mens flere ander studier har argumentert for at det er et større utbytte av flere sett (multiple- sett) per øvelse @galvão2005 , @humburg2007. Ettersom det er motstridende artikler innenfor dette området ønsker jeg i denne studien å undersøke om det er en større effekt i å trene multiple- sett mot single- sett når det kommer til utvikling av muskelstyrke og muskelvekst.
+
+# Metode
+
+## Forsøkspersoner
+
+I denne studien var det med 41 deltakere mellom 18 og 40, både kvinner og menn. Kvalifikasjonskriteriet var å ikke røyke, og andre ekstra kriterier var intoleranse til lokal bedøvelse, en treningshistorikk på mer enn en ukentlig styrketreningsøkt i løpet av de siste 12 måneder, nedsatt muskelstyrke på grunn av nåværende eller tidligere skade, og inntak av medisiner som kunne påvirke styrketreningen. 7 deltakere ble utelukket fra studien ettersom de ikke oppfylte kravet om å fullføre minst 85% av de planlagte treningsøktene. På Baseline var det ingen signifikant forskjell mellom gruppene som kunne føre til fordeler/ ulemper i testen. Beinøvelser ble utført på ett og ett bein for å kunne tillate for individuelle forskjell i treningsvolum. For hver deltaker ble det randomisert tildelt styrkeøvelser av enten ett sett (single- sett) eller tre sett (multiple- sett) for hvert bein. Muskelstyrken ble målt ved baseline og etter treningsintervensjonen. Muskelbiosien ble målt fra begge bein (vastus lateralis) ved baseline og etter 12 uker med trening i uthvilt tilsand.
+
+ 
+
+## **Treningsprotokol**
+
+Før alle treningsøktene ble det utført en standardisert oppvarmingsrutine som inneholdt 5 min sykling og 10 repetisjoner med kroppsvekt av pushups, situps, rygghev og squats og 10 repetisjoner på 50% av 1RM på hver øvelse de skal trene. Beinøvelsene ble utført i følgende rekkefølge: ettbeinsbeinpress, kne fleksjon og kneekstensjon utført som enten single- sett eller multiple- sett. Etter beinøvelsene utførte deltakerne to sett av bilatteral benkpress, nedtrekk og enten skulderpress eller sittende roing. Pausene mellom settene var på 90- 180 sekunder. Intensiteten på treningsøktene ble gradvis økt gjennom treningsperioden, deltakerne utførte 10RM de første 2 ukene, etterfulgt av 8RM i 3 uker og 7 uker med 7RM. Treningsøktene med maksimal innsats hadde minst 48t mellom og treningsøkter og submaksimale økter hadde 24t mellom. For å hjelpe med restitusjonen ble en standardisert drikke gitt etter hver øvelse.
+
+Maksimal styrke ble beskrevet som 1RM i ettbeinsbeinpress og kneekstensjon. Testen for hver øvelse startet med en standardisert spesifikk oppvarming før 1RM ble funnet ved å øke motstanden progressivt til deltakeren ikke lenger klarte å løfte vekten.
+
+Tverrsnittarealet til musklene i quadriceps (vastus lateralis, medialis, intermedius og rectus femoris) ble testet før og etter treningsperioden med MRI- scan. Kroppssammensetning ble bestemt før og etter treningsperioden ved bruk av en DXA- scan. Før MRI og DXA målingene måtte deltakerne være fastende i 2timer og måtte unngå hard fysisk aktivitet 48t før.  
+
+## Statestikk
+
+All deskriptiv data er presentert som et gjennomsnitt av prosentvis ending med standardavvik ved mindre annet er oppgitt. Statistiske tester ble utført i RStudio (versjon RStudio 1.4.1717; R Foundation for Statistics Computing, Vienna, AT)
+
+# Resultater
 
 ```{r setup, include=FALSE}
 remotes::install_github("dhammarstrom/exscidata")
@@ -19,9 +46,6 @@ library(exscidata)
 data("dxadata") 
 data("strengthvolume")
 ```
-
-
-
 
 ```{r}
 library(tidyverse)
@@ -72,12 +96,6 @@ summary(m2)
 confint(m2)
 ```
 
-
-
-
-
-
-
 ```{r}
 
 modeldat <- dxadata %>%
@@ -99,9 +117,6 @@ modeldat <- dxadata %>%
 modeldat %>%
  ggplot(aes(time, lean.mass, group = paste(participant, group), color = group)) + geom_line() + theme_minimal()
 ```
-
-
-
 
 ```{r}
 
@@ -152,12 +167,10 @@ print()
 
 ```
 
+# Diskusjon
 
+## Konklusjon
 
+# Refferanser 
 
-
-
-
-
-
-
+[@carpinelli1998\]\[@galvão2005\]\[@hass2001\]\[@humburg2007\]\[@kraemer2002\]\[@krieger2010]
