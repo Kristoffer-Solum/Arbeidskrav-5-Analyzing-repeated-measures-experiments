@@ -3,11 +3,11 @@ title: "Arbeidskrav 5 Analyzing repeated measures experiments"
 author: "Kristoffer Solum"
 date: "16 11 2021"
 output:
-  pdf_document: default
-  word_document: default
   html_document: default
+  word_document: default
+  pdf_document: default
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 bibliography: references.bib
 ---
 
@@ -34,7 +34,7 @@ Tverrsnittarealet til musklene i quadriceps (vastus lateralis, medialis, interme
 
 ## Statestikk
 
-All deskriptiv data er presentert som et gjennomsnitt av prosentvis ending med standardavvik ved mindre annet er oppgitt. Statistiske tester ble utført i RStudio (versjon RStudio 1.4.1717; R Foundation for Statistics Computing, Vienna, AT)
+All deskriptiv data er presentert som et gjennomsnitt av prosentvis ending med standardavvik ved mindre annet er oppgitt. p- verdier er regnet ut ved en ANCOVA modell, på endringsscoren fra post til pre. Statistiske tester ble utført i RStudio (versjon RStudio 1.4.1717; R Foundation for Statistics Computing, Vienna, AT)
 
 # Resultater
 
@@ -51,7 +51,7 @@ data("dxadata")
 data("strengthvolume")
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
 library(tidyverse)
 dat <- dxadata %>%
   select(participant:include, lean.left_leg, lean.right_leg) %>%
@@ -95,7 +95,7 @@ plot(m0)
 
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 1 viser økningen i muskelvekst fra pre- post for alle forsøkspersoner skildt ved single- sett og multiple- sett"}
 
 modeldat <- dxadata %>%
   select(participant:include, lean.left_leg, lean.right_leg) %>%
@@ -115,7 +115,7 @@ modeldat %>%
  ggplot(aes(time, lean.mass, group = paste(participant, group), color = group)) + geom_line() + theme_minimal()
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
 
 styrke1 <- strengthvolume %>%
   filter(!is.na(load)) %>%
@@ -149,7 +149,7 @@ plot(s0)
 
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 2 viser endring i muskelstyrke for alle forsøkspersonene fra pre- post skildt ved single- sett og multiple- sett"}
 styrkemodell <- strengthvolume %>%
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
