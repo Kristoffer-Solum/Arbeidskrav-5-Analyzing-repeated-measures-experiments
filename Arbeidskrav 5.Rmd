@@ -14,7 +14,7 @@ bibliography: references.bib
 # Inntroduksjon
 
 I denne oppgaven skal jeg analysere og diskutere og forske på artikler som undersøker effekten av styrketrening på muskelstyrke og muskelvekst.  \
-Forskning på styrketrening har vist det det forbedrer muskelstyrke, muskel masse, beintetthet og bindevevstykkelse [@kraemer2002a\]. For å designe et treningsprogram for styrketrening krever det at man tar en del variabler til betraktning, dette inkluderer, treningsfrekvens, intensitet og volum av programmet \[@hass2001a\]. Innenfor forskningen på styrketrening er det stor forskjell hva er fokuset, og noe av det mest interessante er å se på forskjellen mellom antall sett, som har blitt gjort i flere studier \[@krieger2010a\]. Tidligere har det blitt argumentert for at ett sett (single- sett) per øvelse er alt som er nødvendig for hele populasjonen og at man ikke får større utbytte av flere sett \[@carpinelli1998c\]. Mens flere ander studier har argumentert for at det er et større utbytte av flere sett (multiple- sett) per øvelse \[@galvão2005c; @humburg2007b]. Ettersom det er motstridende artikler innenfor dette området ønsker jeg i denne studien å undersøke om det er en større effekt i å trene multiple- sett mot single- sett når det kommer til utvikling av muskelstyrke og muskelvekst.
+Forskning på styrketrening har vist det det forbedrer muskelstyrke, muskel masse, beintetthet og bindevevstykkelse [@kraemer2002a]. For å designe et treningsprogram for styrketrening krever det at man tar en del variabler til betraktning, dette inkluderer, treningsfrekvens, intensitet og volum av programmet [@hass2001a]. Innenfor forskningen på styrketrening er det stor forskjell hva er fokuset, og noe av det mest interessante er å se på forskjellen mellom antall sett, som har blitt gjort i flere studier [@krieger2010a]. Tidligere har det blitt argumentert for at ett sett (single- sett) per øvelse er alt som er nødvendig for hele populasjonen og at man ikke får større utbytte av flere sett [@carpinelli1998c]. Mens flere ander studier har argumentert for at det er et større utbytte av flere sett (multiple- sett) per øvelse \[@galvão2005d\] @humburg2007e. Ettersom det er motstridende artikler innenfor dette området ønsker jeg i denne studien å undersøke om det er en større effekt i å trene multiple- sett mot single- sett når det kommer til utvikling av muskelstyrke og muskelvekst.
 
 # Metode
 
@@ -174,6 +174,6 @@ Likevel samsvarer ikke resultatet i denne studien med [@carpinelli1998d]. Der ko
 
 Totalt sett viste denne studien at multiple- sett ga en bedre økning i muskelstyrke og muskelvekst sammenlignet med single- sett. Selv om begge gruppene hadde økning vil det kunne være mer hensiktsmessig å trene styrketrening med multiple- sett.
 
-# Refferanser
+# Referanser
 
 [@carpinelli1998; @galvão2005; @hass2001; @humburg2007; @kraemer2002; @krieger2010]
