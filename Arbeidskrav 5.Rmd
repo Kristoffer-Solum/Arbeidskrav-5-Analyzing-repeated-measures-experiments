@@ -46,14 +46,14 @@ knitr::opts_chunk$set(echo = TRUE)
 remotes::install_github("dhammarstrom/exscidata")
 
 library(tidyverse)
-library(exscidata)
+library(exscidata) # lastet inn data
 data("dxadata") 
 data("strengthvolume")
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
 library(tidyverse)
-dat <- dxadata %>%
+dat <- dxadata %>%  # endre tabellen for å gjøre utregninger
   select(participant:include, lean.left_leg, lean.right_leg) %>%
   pivot_longer(names_to = "leg", 
                values_to = "lean.mass", 
@@ -62,7 +62,7 @@ dat <- dxadata %>%
          sets = if_else(multiple == leg, "multiple", "single")) %>%
   select(participant, time, sets, sex, leg, lean.mass) %>%
   
-  pivot_wider(names_from = time,
+  pivot_wider(names_from = time, # Regner ut prosentvis endring
               values_from = lean.mass) %>%
   mutate(lbm.change = post - pre) %>%
   mutate(pre.mc = pre - mean(pre)) %>% 
@@ -75,7 +75,7 @@ dat <- dxadata %>%
   
 
 
-dat %>%   
+dat %>%   # Regner ut gjennomsnittlig prosentvis økning per gruppe
   group_by(sets) %>%
   summarise(m = mean(prosentvis.endring),
             sd = sd(prosentvis.endring)) 
@@ -88,7 +88,7 @@ dat %>%
 
 library(lme4)
 library(lmerTest)
-m0 <- lm(post ~ pre + sex + sets, data = dat)
+m0 <- lm(post ~ pre + sex + sets, data = dat) #gjør en analyse
 
 summary(m0)
 plot(m0)
@@ -97,7 +97,7 @@ plot(m0)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 1 viser økningen i muskelvekst fra pre- post for alle forsøkspersoner skildt ved single- sett og multiple- sett"}
 
-modeldat <- dxadata %>%
+modeldat <- dxadata %>%  # endre tabellen for å gjøre utregninger
   select(participant:include, lean.left_leg, lean.right_leg) %>%
   pivot_longer(names_to = "leg", 
                values_to = "lean.mass", 
@@ -111,13 +111,13 @@ modeldat <- dxadata %>%
 
 
 
-modeldat %>%
+modeldat %>%   # Lager figur pre- post per gruppe
  ggplot(aes(time, lean.mass, group = paste(participant, group), color = group)) + geom_line() + theme_minimal()
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
 
-styrke1 <- strengthvolume %>%
+styrke1 <- strengthvolume %>% # endre tabellen for å gjøre utregninger
   filter(!is.na(load)) %>%
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
@@ -126,12 +126,12 @@ styrke1 <- strengthvolume %>%
   ungroup() %>%
   
   
-  pivot_wider(names_from = time,
+  pivot_wider(names_from = time, # Regner ut prosentvis endring
               values_from = combined.load) %>%
   mutate(prosentvis.endring = ((post - pre) / pre) * 100) 
 
 
-styrke1 %>%    
+styrke1 %>%     # Regner ut gjennomsnittlig prosentvis økning per gruppe
   filter(!is.na(post)) %>%
   group_by(sets) %>%
   summarise(m = mean(prosentvis.endring),
@@ -140,7 +140,7 @@ styrke1 %>%
 
 
 
-s0 <- lm(post ~ pre + sex + sets, data = styrke1)
+s0 <- lm(post ~ pre + sex + sets, data = styrke1) #Gjør analyse
 
 summary(s0)
 plot(s0)
@@ -150,14 +150,14 @@ plot(s0)
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 2 viser endring i muskelstyrke for alle forsøkspersonene fra pre- post skildt ved single- sett og multiple- sett"}
-styrkemodell <- strengthvolume %>%
+styrkemodell <- strengthvolume %>% # endre tabellen for å gjøre utregninger
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
   group_by(participant, time, sex, sets) %>%
   summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
   ungroup() 
 
-styrkemodell %>%
+styrkemodell %>% # Lager en figur pre- post per gruppe
   filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
   mutate(time = factor(time, levels = c("pre", "post")),
          group = factor(sets, levels = c("single", "multiple"))) %>%
