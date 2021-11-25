@@ -7,7 +7,7 @@ output:
   pdf_document: default
   html_document: default
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 bibliography: references.bib
 ---
 
@@ -149,7 +149,52 @@ plot(s0)
 
 ```
 
+
+```{r, include=TRUE, results="hide"}
+strengthvolume %>%
+  filter(exercise == "legext", time %in% c("pre", "post")) %>%
+  group_by(sets, time) %>%
+  summarise(m = mean(load, na.rm = TRUE), 
+            s = sd(load, na.rm = TRUE)) %>%
+  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Pre-training", "Post-training")), 
+         sets = factor(sets, levels = c("single", "multiple"), labels = c("Single-set", "Multiple-set"))) %>%
+  ggplot(aes(time, m, color = sets)) + 
+  
+  geom_errorbar(aes(ymin = m - s, ymax = m + s), 
+                position = position_dodge(width = 0.2), 
+                width = 0.2) +
+  geom_point(position = position_dodge(width = 0.2)) +
+  
+  labs(x = "Time-point", 
+       y = "Average load (kg)", 
+       color = "Sets") +
+  
+  theme_bw() + 
+  
+  theme(legend.position = c(0.1, 0.9))
+```
+
+
+```{r, include=TRUE, results="hide"}
+styrke.gjennomsnitt <- styrke1 %>%
+  group_by(sets) %>%
+  summarise(m = mean(prosentvis.endring, na.rm = TRUE),
+            sd = sd(prosentvis.endring, na.rm = TRUE)) %>%
+  print()
+
+styrke.gjennomsnitt %>%
+  
+ggplot(aes(sets, m)) + geom_point() + geom_line() + geom_errorbar(aes(ymax = m + sd, ymin = m - sd, width = 0.2, color = "red")) + geom_line(data = styrke1, aes(sets, prosentvis.endring, group = participant), alpha = 0.9, color = "blue")
+  
+  
+
+```
+
+
+
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 2 viser endring i muskelstyrke for alle forsøkspersonene fra pre- post skildt ved single- sett og multiple- sett"}
+
 styrkemodell <- strengthvolume %>% # endre tabellen for å gjøre utregninger
   group_by(exercise) %>%
   mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
