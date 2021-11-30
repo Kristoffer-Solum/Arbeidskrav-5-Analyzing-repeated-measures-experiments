@@ -7,14 +7,14 @@ output:
   pdf_document: default
   html_document: default
 editor_options:
-  chunk_output_type: console
+  chunk_output_type: inline
 bibliography: references.bib
 ---
 
 # Inntroduksjon
 
 I denne oppgaven skal jeg analysere, diskutere og forske på artikler som undersøker effekten av styrketrening på muskelstyrke og muskelvekst.  \
-Forskning på styrketrening har vist det det forbedrer muskelstyrke, muskel masse, beintetthet og bindevevstykkelse [@kraemer2002a]. For å designe et treningsprogram for styrketrening krever det at man tar en del variabler til betraktning, dette inkluderer, treningsfrekvens, intensitet og volum av programmet [@hass2001a]. Innenfor forskningen på styrketrening er det stor forskjell hva er fokuset, og noe av det mest interessante er å se på forskjellen mellom antall sett, som har blitt gjort i flere studier [@krieger2010a]. Tidligere har det blitt argumentert for at ett sett (single- sett) per øvelse er alt som er nødvendig for hele populasjonen og at man ikke får større utbytte av flere sett [@carpinelli1998c]. Mens flere ander studier har argumentert for at det er et større utbytte av flere sett (multiple- sett) per øvelse \[@galvão2005d\] @humburg2007e. Ettersom det er motstridende artikler innenfor dette området ønsker jeg i denne studien å undersøke om det er en større effekt i å trene multiple- sett mot single- sett når det kommer til utvikling av muskelstyrke og muskelvekst.
+Forskning på styrketrening har vist det det forbedrer muskelstyrke, muskel masse, beintetthet og bindevevstykkelse [@kraemer2002a]. For å designe et treningsprogram for styrketrening krever det at man tar en del variabler til betraktning, dette inkluderer, treningsfrekvens, intensitet og volum av programmet [@hass2001a]. Innenfor forskningen på styrketrening er det stor forskjell hva er fokuset, og noe av det mest interessante er å se på forskjellen mellom antall sett, som har blitt gjort i flere studier [@krieger2010a]. Tidligere har det blitt argumentert for at ett sett (single- sett) per øvelse er alt som er nødvendig for hele populasjonen og at man ikke får større utbytte av flere sett [@carpinelli1998c]. Mens flere ander studier har argumentert for at det er et større utbytte av flere sett (multiple- sett) per øvelse @galvão2005a; @humburg2007e. Ettersom det er motstridende artikler innenfor dette området ønsker jeg i denne studien å undersøke om det er en større effekt i å trene multiple- sett mot single- sett når det kommer til utvikling av muskelstyrke og muskelvekst.
 
 # Metode
 
@@ -95,7 +95,25 @@ plot(m0)
 
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 1 viser økningen i muskelvekst fra pre- post for alle forsøkspersoner skildt ved single- sett og multiple- sett"}
+
+
+
+```{r Prosentvis økning figur dexa, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 1 viser prosentvis økning ved multiple- sett og singe- sett"}
+dat.mean <- dat %>%
+  group_by(sets) %>%
+  summarise(m = mean(prosentvis.endring, na.rm = TRUE),
+            sd = sd(prosentvis.endring, na.rm = TRUE)) %>%
+  print()
+
+dat.mean %>%
+  
+ggplot(aes(sets, m)) + geom_point() + geom_line() + geom_errorbar(aes(ymax = m + sd, ymin = m - sd, width = 0.2), color = "red") + geom_line(data = dat, aes(sets, prosentvis.endring, group = participant), alpha = 2, color = "blue") +
+
+labs(x = "Gruppe",
+     y = "Prosentvis endring")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide", fig.cap = "Figur 1 viser økningen i muskelvekst fra pre- post for alle forsøkspersoner skildt ved single- sett og multiple- sett"}
 
 modeldat <- dxadata %>%  # endre tabellen for å gjøre utregninger
   select(participant:include, lean.left_leg, lean.right_leg) %>%
@@ -149,8 +167,7 @@ plot(s0)
 
 ```
 
-
-```{r, include=TRUE, results="hide"}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide"}
 strengthvolume %>%
   filter(exercise == "legext", time %in% c("pre", "post")) %>%
   group_by(sets, time) %>%
@@ -174,8 +191,7 @@ strengthvolume %>%
   theme(legend.position = c(0.1, 0.9))
 ```
 
-
-```{r, include=TRUE, results="hide"}
+```{r Prosentvis økning figur styrke, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide"}
 styrke.gjennomsnitt <- styrke1 %>%
   group_by(sets) %>%
   summarise(m = mean(prosentvis.endring, na.rm = TRUE),
@@ -184,16 +200,16 @@ styrke.gjennomsnitt <- styrke1 %>%
 
 styrke.gjennomsnitt %>%
   
-ggplot(aes(sets, m)) + geom_point() + geom_line() + geom_errorbar(aes(ymax = m + sd, ymin = m - sd, width = 0.2, color = "red")) + geom_line(data = styrke1, aes(sets, prosentvis.endring, group = participant), alpha = 0.9, color = "blue")
+ggplot(aes(sets, m)) + geom_point() + geom_line() + geom_errorbar(aes(ymax = m + sd, ymin = m - sd, width = 0.2), color = "black") + geom_line(data = styrke1, aes(sets, prosentvis.endring, group = participant), alpha = 2, color = "green") +
+
+labs(x = "Gruppe",
+     y = "Prosentvis endring")
   
   
 
 ```
 
-
-
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, results="hide", fig.cap = "Figur 2 viser endring i muskelstyrke for alle forsøkspersonene fra pre- post skildt ved single- sett og multiple- sett"}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=False, results="hide", fig.cap = "Figur 2 viser endring i muskelstyrke for alle forsøkspersonene fra pre- post skildt ved single- sett og multiple- sett"}
 
 styrkemodell <- strengthvolume %>% # endre tabellen for å gjøre utregninger
   group_by(exercise) %>%
